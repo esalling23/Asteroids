@@ -38,7 +38,6 @@ public class AsteroidSpawner : MonoBehaviour
 
         // Give it a random sprite
         int ran = Random.Range(0, sprites.Count - 1);
-        print(sprites[ran]);
         newAsteroid.GetComponent<SpriteRenderer>().sprite = sprites[ran];
 
         // Initialize it w/ direction

@@ -7,6 +7,19 @@ using UnityEngine;
 /// </summary>
 public class Ship : MonoBehaviour
 {
+    // Bullet shooting support
+    [SerializeField]
+    GameObject bulletPrefab;
+    const float ShootForce = 50;
+
+    // Shooting timer delay support
+    bool canShoot = true;
+    float timeSinceLastShoot = 0f;
+    const float shootDelay = 0.25f;
+
+    // Input support
+    bool previousFrameInputChange = false;
+
     // Speed of ship movement
     const float RotateUnitsPerSecond = 10;
     const float ThrustForce = 15;
@@ -20,6 +33,20 @@ public class Ship : MonoBehaviour
     void Start()
     {
         body = GetComponent<Rigidbody2D>();
+    }
+
+    private void Update()
+    {
+        if (!canShoot)
+        {
+            timeSinceLastShoot += Time.deltaTime;
+
+            if (timeSinceLastShoot >= shootDelay)
+            {
+                canShoot = true;
+                timeSinceLastShoot = 0f;
+            }
+        }
     }
 
     /// <summary>
@@ -58,6 +85,7 @@ public class Ship : MonoBehaviour
             thrustDirection.y = Mathf.Sin(angle);
         }
 
+        // Spacebar thrusts ship forward
         float thrustInput = Input.GetAxis("Thrust");
 
         if (thrustInput != 0)
@@ -65,7 +93,27 @@ public class Ship : MonoBehaviour
             // Add force to ship
             body.AddForce(ThrustForce * thrustDirection, ForceMode2D.Force);
         }
-        
+
+        // Shoot bullets
+        float shootInput = Input.GetAxis("Shoot");
+
+        if (shootInput != 0)
+        {
+            if (!previousFrameInputChange && canShoot)
+            {
+                previousFrameInputChange = true;
+
+                GameObject bullet = Instantiate(bulletPrefab, transform.position,
+                Quaternion.identity);
+                bullet.GetComponent<Rigidbody2D>().AddForce(ShootForce * thrustDirection, ForceMode2D.Impulse);
+
+                canShoot = false;
+            }
+            else
+            {
+                previousFrameInputChange = false;
+            }
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -73,6 +121,7 @@ public class Ship : MonoBehaviour
         if (collision.gameObject.tag == "Asteroid")
         {
             Destroy(gameObject);
+            print("GAME OVER");
         }
     }
 }
