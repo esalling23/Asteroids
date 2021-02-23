@@ -15,7 +15,8 @@ public class Bullet : MonoBehaviour
     bool living = true;
 
     // Damage value for killing things
-    int damage = 50;
+    [SerializeField]
+    int damage = 25;
 
     private void Update()
     {
