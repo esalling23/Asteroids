@@ -97,6 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f6ba95c6aa2448fb9f3c297d6339cba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  asteroid: {fileID: 7145353127602263921}
 --- !u!50 &4469848487837776633
 Rigidbody2D:
   serializedVersion: 4

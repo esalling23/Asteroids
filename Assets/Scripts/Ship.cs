@@ -7,6 +7,10 @@ using UnityEngine;
 /// </summary>
 public class Ship : MonoBehaviour
 {
+    // Game Timer support
+    [SerializeField]
+    UI ui;
+
     // Bullet shooting support
     [SerializeField]
     GameObject bulletPrefab;
@@ -122,6 +126,7 @@ public class Ship : MonoBehaviour
         {
             Destroy(gameObject);
             print("GAME OVER");
+            ui.GameOver();
         }
     }
 }
