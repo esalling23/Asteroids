@@ -8,6 +8,8 @@ public class AsteroidSpawner : MonoBehaviour
 
     GameObject asteroidPrefab;
 
+    Dictionary<Direction, Vector2> startingLocations = new Dictionary<Direction, Vector2>();
+
     // Start is called before the first frame update
     void Start()
     {
@@ -17,7 +19,6 @@ public class AsteroidSpawner : MonoBehaviour
 
         // Spawn starting asteroids
         // startingLocations contains the direction & location of each
-        Dictionary<Direction, Vector2> startingLocations = new Dictionary<Direction, Vector2>();
         startingLocations.Add(Direction.Up, new Vector2(0, ScreenUtils.ScreenBottom));
         startingLocations.Add(Direction.Down, new Vector2(0, ScreenUtils.ScreenTop));
         startingLocations.Add(Direction.Left, new Vector2(ScreenUtils.ScreenRight, 0));
@@ -49,5 +50,13 @@ public class AsteroidSpawner : MonoBehaviour
         sprites.Add(Resources.Load<Sprite>("Sprites/asteroid1"));
         sprites.Add(Resources.Load<Sprite>("Sprites/asteroid2"));
         sprites.Add(Resources.Load<Sprite>("Sprites/asteroid3"));
+    }
+
+    public void ReplenishAsteroid()
+    {
+        Direction ranDir = (Direction)Random.Range(0, 4);
+
+        // An asteroid has been destroyed! Time to make another
+        Spawn(ranDir, startingLocations[ranDir]);
     }
 }

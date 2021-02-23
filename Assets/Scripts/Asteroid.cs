@@ -15,9 +15,12 @@ public class Asteroid : MonoBehaviour
     [SerializeField]
     GameObject asteroid;
 
+    AsteroidSpawner spawner;
+
     // Start is called before the first frame update
     void Start()
     {
+        spawner = GameObject.FindWithTag("MainCamera").GetComponent<AsteroidSpawner>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         maxHealth = health;
     }
@@ -75,6 +78,7 @@ public class Asteroid : MonoBehaviour
         if (health == 0)
         {
             Destroy(gameObject);
+            spawner.ReplenishAsteroid();
         }
         else if (maxHealth / health >= 2 && !halfLife)
         {
