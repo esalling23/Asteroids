@@ -7,6 +7,11 @@ public class ScreenWrap : MonoBehaviour
 
     float colliderHalfSize;
 
+    float rightPos;
+    float leftPos;
+    float topPos;
+    float bottomPos;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -14,24 +19,44 @@ public class ScreenWrap : MonoBehaviour
         colliderHalfSize = collider.radius;
     }
 
-    private void OnBecameInvisible()
+    private void FixedUpdate()
     {
-        Wrap();
+        rightPos = transform.position.x - colliderHalfSize;
+        leftPos = transform.position.x + colliderHalfSize;
+        topPos = transform.position.y - colliderHalfSize;
+        bottomPos = transform.position.y + colliderHalfSize;
+
+        if (rightPos > ScreenUtils.ScreenRight
+            || leftPos < ScreenUtils.ScreenLeft
+            || topPos > ScreenUtils.ScreenTop
+            || bottomPos < ScreenUtils.ScreenBottom)
+        {
+            Wrap();
+        }
     }
 
     private void Wrap()
     {
-        Vector3 position = transform.position;
-        if (position.x - colliderHalfSize > ScreenUtils.ScreenRight
-            || position.x + colliderHalfSize < ScreenUtils.ScreenLeft)
+        Vector3 newPosition = transform.position;
+
+        if (rightPos >= ScreenUtils.ScreenRight)
         {
-            position.x = -position.x;
+            newPosition.x = -rightPos;
         }
-        else if (position.y - colliderHalfSize > ScreenUtils.ScreenTop
-            || position.y + colliderHalfSize < ScreenUtils.ScreenBottom)
+        else if (leftPos <= ScreenUtils.ScreenLeft)
         {
-            position.y = -position.y;
+            newPosition.x = -leftPos;
         }
-        transform.position = position;
+
+        if (topPos >= ScreenUtils.ScreenTop)
+        {
+            newPosition.y = -topPos;
+        }
+        else if (bottomPos <= ScreenUtils.ScreenBottom)
+        {
+            newPosition.y = -bottomPos;
+        }
+
+        transform.position = newPosition;
     }
 }
